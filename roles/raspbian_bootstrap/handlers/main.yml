@@ -1,0 +1,21 @@
+---
+- name: restart openntpd
+  service: name=openntpd state=restarted
+
+- name: restart ntp
+  service: name=ntp state=restarted
+
+- name: restart cron
+  service: name=cron state=restarted
+
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
+
+- name: update tzdata
+  command: dpkg-reconfigure -f noninteractive tzdata
+
+- name: locale-gen
+  command: locale-gen
+
+- name: reload networking
+  service: name=networking state=reloaded

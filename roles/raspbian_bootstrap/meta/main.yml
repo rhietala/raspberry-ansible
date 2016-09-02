@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: Emilien Mantel
+  description: Normalize and prepare a Debian server
+  company:
+  license: GPLv2
+  min_ansible_version: 1.9
+  platforms:
+  - name: Debian
+    versions:
+    - wheezy
+    - jessie
+  galaxy_tags:
+  - networking
+  - packaging
+  - system
+  - debian
+  - apt
+  - alternatives
+  - editor
+  - ntp
+dependencies: []
+

@@ -1,0 +1,17 @@
+---
+
+# Force jessie (lsb-release with bad configuration)
+ansible_distribution_release: 'jessie'
+
+# We can't set hostname
+dbs_set_hostname: false
+
+# Hummm really?
+dbs_use_systemd: false
+
+dbs_apt_default_host: 'packages.devuan.org'
+dbs_repo_new:
+  - "http://{{ dbs_apt_default_host }}/merged {{ ansible_distribution_release }} {{ dbs_apt_components }}"
+  - "http://{{ dbs_apt_default_host }}/merged {{ ansible_distribution_release }}-updates {{ dbs_apt_components }}"
+  - "http://{{ dbs_apt_default_host }}/merged {{ ansible_distribution_release }}-backports main"
+#  - "http://security.debian.org/ {{ ansible_distribution_release }}/updates {{ dbs_apt_components }}"

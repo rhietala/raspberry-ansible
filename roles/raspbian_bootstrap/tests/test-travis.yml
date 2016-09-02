@@ -1,0 +1,38 @@
+---
+
+- hosts: all
+  vars:
+# --> Travis
+    dbs_apt_default_host: 'cloudfront.debian.net'
+    dbs_use_unbound: false
+    dbs_set_hostname: false
+    dbs_set_locale: false
+    dbs_use_systemd: true
+    dbs_sysctl_config: []
+# <-- Travis
+    dbs_uninstall_packages:
+      - 'atop'
+    dbs_groups:
+      - name: 'administrator'
+      - name: 'superdaemon'
+        system: yes
+      - name: 'regis'
+        state: 'absent'
+    dbs_users:
+      - name: 'hanx'
+        sudo: true
+        ssh_keys:
+          - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSps/VDsZlUfhCunjC15A8kYa1zn3hjLAk4M1NwBvQzRYoaOKpUnBJaCo+xGduYh+zfCyHWcycvZfZXeh2nmuzvhlvyeGAcX5ZCoRaGiXA+uhXNViZInYiKqfXZjPUrJXHqXJ6wl6dLPGCPdnDhMyp7v8eQKRIr0ejzrSPrmj7k8xU065HF56xO7DNpCs3b+W3WeutzcTE4rXVTrxLKmVaW+m+9IPCM/6eK2sH7ok4xkN8U73+KGAVtJDFLisu8E1LD+Kp/f3orpV3KFfJ2nfHhWghM24SrQsok0JJAzdWQMKDOzJXCFWQHL2TlZyfqcr56+xB2yn/HneU8wKLlBxh hanx@emantel'
+      - name: 'hx'
+        group: 'www-data'
+        groups: 'superdaemon'
+        shell: '/usr/sbin/nologin'
+        sudo: false
+        ssh_keys: []
+      - name: 'regis'
+        ssh_keys: []
+        state: 'absent'
+    dbs_ntp_pkg: 'ntp'
+  roles:
+    - ../../
+

@@ -1,0 +1,57 @@
+#############
+## Config  ##
+#############
+
+umask 022
+
+# BASH
+if [ -f /etc/bash_completion ];
+then
+       . /etc/bash_completion
+fi
+
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+
+if [ ! -f /etc/bash_completion.d/git-prompt ];
+then
+	alias __git_ps1=''
+fi
+export PS1='\[\e[01;32m\]\u@\[\e[0m\]\[\e[01;31m\]\h\[\e[0m\]\[\e[01;35m\]:\[\e[0m\]\[\e[01;34m\]\w\[\e[0m\]\[\e[00;35m\]{\[\e[0m\]\[\e[00;37m\]$?\[\e[0m\]\[\e[00;35m\]}\[\e[0m\]\[\e[01;33m\]$(__git_ps1)\[\e[0m\]\[\e[01;31m\]\$\[\e[0m\]\[\e[00;37m\] \[\e[0m\]'
+
+# Ansible
+export ANSIBLE_NOCOWS=1
+export HISTCONTROL=ignoredups
+
+shopt -s checkwinsize
+shopt -s expand_aliases
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+
+if [ -f /usr/bin/most ];
+then
+	export PAGER=most
+fi
+
+#############
+##  Alias  ##
+#############
+
+# Commands
+alias ls='ls --color'
+alias ftp='ftp -p'
+alias grep='grep --color'
+alias egrep='egrep --color'
+alias df='df -h'
+alias du='du -h'
+alias free='free -m'
+alias ll='ls -lh'
+alias lll='ls -lah'
+alias s='sudo -s'
+alias p='ping free.fr'
+alias sss='scrot -s'
+alias swap='sudo swapoff -a && echo OFF && sudo swapon -a && echo ON'
+
+[ -f ~/.bash_functions ] && . ~/.bash_functions
+[ -f ~/.bashrc_local ] && . ~/.bashrc_local
+

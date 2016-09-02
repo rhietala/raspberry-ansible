@@ -1,0 +1,43 @@
+---
+
+# Doc: https://wiki.debian.org/HowTo/ChangeHostname
+# TODO : notify other services
+
+- name: HOSTNAME
+  hostname: name={{ dbs_hostname }}
+  notify: restart rsyslog
+  register: change_hostname
+
+- name: TEMPLATE | Cleanup /etc/hosts
+  template: src=etc/hosts.j2 dest=/etc/hosts
+  notify: restart rsyslog
+
+# Don't work on Jessie
+#- name: SERVICE | Force hostname.sh start
+#  service: name=hostname.sh state=started
+#  when: change_hostname.changed
+
+- name: REPLACE | Change old fqdn dbs_hostname to new on several files
+  replace: >
+    dest={{ item }}
+    regexp='\b{{ ansible_fqdn }}\b'
+    replace='{{ dbs_hostname }}'
+  with_items: "{{ dbs_hostname_files }}"
+  ignore_errors: yes
+  when: change_hostname.changed
+
+- name: REPLACE | Change old short dbs_hostname to new on several files
+  replace: >
+    dest={{ item }}
+    regexp='\b{{ ansible_hostname }}\b'
+    replace='{{ dbs_hostname | regex_replace('^(\w)\..+$', '\\1') }}'
+  with_items: "{{ dbs_hostname_files }}"
+  ignore_errors: yes
+  when: change_hostname.changed
+
+# Dangerous...
+#- name: SERVICE | Force networking restart
+#  service: name=networking state=restarted
+#  when: change_hostname.changed
+
+

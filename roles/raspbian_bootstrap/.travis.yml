@@ -1,0 +1,19 @@
+env:
+  - PLATFORM=debian-wheezy
+  - PLATFORM=debian-jessie
+
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+install:
+  - docker build -f tests/$PLATFORM.Dockerfile -t test-$PLATFORM .
+
+script:
+  - docker run --name $PLATFORM test-$PLATFORM
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

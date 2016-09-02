@@ -1,0 +1,40 @@
+---
+
+- name: APT | Install sysvinit
+  apt: pkg={{ item }} state=present
+  with_items:
+    - sysvinit-core
+    - sysvinit
+    - sysvinit-utils
+  register: sysv_installed
+
+- name: SHELL | Get SSH port
+  shell: netstat -nlpt | awk '$1 ~ /^tcp$/ && $NF ~ /sshd\s*$/ { print $4 }' | cut -d ':' -f 2
+  register: ss
+  changed_when: false
+  when: sysv_installed.changed
+
+# See: https://github.com/ansible/ansible/issues/10616
+- name: SHELL | Reboot machine
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: sysv_installed.changed
+
+- name: LOCAL_ACTION WAIT_FOR | Waiting for server to come back
+  local_action: >
+    wait_for
+    host={{ ansible_ssh_host | default(inventory_hostname) }}
+    port={{ ansible_ssh_port | default(ss.stdout) }}
+    state=started
+    delay=30
+  become: false
+  when: sysv_installed.changed
+
+- name: APT | Purge systemd
+  apt: pkg=systemd state=absent purge=yes
+
+- name: COPY | Configure APT no extra packages
+  copy: src=etc/apt/preferences.d/systemd dest=/etc/apt/preferences.d/systemd
+

@@ -1,0 +1,9 @@
+---
+
+- name: LOCALE | Add
+  locale_gen: name={{ item }} state=present
+  with_items: "{{ dbs_locales }}"
+  notify: locale-gen
+
+- name: TEMPLATE | Deploy default locale
+  template: src=etc/default/locale.j2 dest=/etc/default/locale

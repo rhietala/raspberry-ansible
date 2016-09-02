@@ -1,0 +1,4 @@
+startup_message off
+nonblock on
+hardstatus on
+hardstatus alwayslastline "%{= kb} [ %{B}SCREEN %{b}] [ %{B}$USER@%H %{b}][ %=%{w}%?%-Lw%?%{b}(%t)%{w}%?%+Lw%?%?%= %{b}][%{B} %l %{B}%{W}%d/%0m/%Y %{b}]"

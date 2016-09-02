@@ -1,0 +1,19 @@
+---
+
+- name: COPY | Set /etc/localtime to {{ dbs_timezone }}
+  copy: >
+    src=/usr/share/zoneinfo/{{ dbs_timezone }}
+    dest=/etc/localtime
+    owner=root
+    group=root
+    mode=0644
+  notify: [ update tzdata, restart cron ]
+
+- name: COPY | Set default timezone
+  copy: >
+    content="{{ dbs_timezone }}\n"
+    dest=/etc/timezone
+    owner=root
+    group=root
+    mode=0644
+  notify: [ update tzdata, restart cron ]

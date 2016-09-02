@@ -1,0 +1,3 @@
+---
+- name: UPDATE-ALTERNATIVE | Vim is my main editor
+  alternatives: name=editor path={{ dbs_alternative_editor }}

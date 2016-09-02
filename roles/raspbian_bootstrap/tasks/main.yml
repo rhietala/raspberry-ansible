@@ -1,0 +1,38 @@
+---
+- name: INCLUDE_VARS | Raspbian
+  include_vars: raspbian.yml
+
+- name: INCLUDE_VARS | Related to OS version
+  include_vars: "{{ ansible_distribution_release }}.yml"
+
+- name: INCLUDE | Prepare system
+  include: prepare.yml
+
+- name: INCLUDE | Set hostname
+  include: hostname.yml
+  when: dbs_set_hostname
+
+- name: INCLUDE | Manage system users
+  include: user.yml
+
+- name: INCLUDE | Configure APT
+  include: apt.yml
+
+- name: INCLUDE | Configure DNS cache
+  include: unbound.yml
+  when: dbs_use_unbound
+
+- name: INCLUDE | Set timezone
+  include: timezone.yml
+  when: dbs_set_timezone
+
+- name: INCLUDE | Manage locales
+  include: locale.yml
+  when: dbs_set_locale
+
+- name: INCLUDE | Install NTP damon
+  include: ntp.yml
+  when: dbs_set_ntp
+
+- name: INCLUDE | Misc system configuration
+  include: system.yml

@@ -1,0 +1,22 @@
+---
+
+- name: APT | Install Unbound
+  apt: pkg=unbound state=present
+
+- name: REPLACE | Apply dns configuration to /etc/network/interfaces if necessary
+  replace: >
+    dest=/etc/network/interfaces
+    regexp='^\s+dns-nameservers'
+    replace='\tdns-nameservers 127.0.0.1'
+  notify: reload networking
+
+- name: STAT | Check if DHCP client config
+  stat: path=/etc/dhcp/dhclient.conf
+  register: dhcp
+
+- name: LINEINFILE | Prepend DNS config on DHCP
+  lineinfile: >
+    dest=/etc/dhcp/dhclient.conf
+    line='prepend domain-name-servers 127.0.0.1;'
+  when: dhcp.stat.exists
+  notify: reload networking
