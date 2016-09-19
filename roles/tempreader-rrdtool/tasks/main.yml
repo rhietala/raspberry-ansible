@@ -1,0 +1,35 @@
+---
+- name: "install required software from apt"
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "python"
+    - "rrdtool"
+    - "libxml2"
+    - "python-dev"
+    - "librrd4"
+    - "librrd-dev"
+
+- name: "install python libraries"
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - "w1thermsensor"
+    - "rrdtool"
+
+- name: "install temperature reading script"
+  copy:
+    src: "readtemp-rrd.py"
+    dest: "{{ script_install_path }}readtemp-rrd.py"
+
+- name: "add temperature reading to cron"
+  cron:
+    name: "read all temperature sensors to rrd"
+    job: "/usr/bin/python {{ script_install_path }}readtemp-rrd.py"
+    minute: "*/5"
+    user: "{{ ansible_user }}"
+
+- name: "run temperature reading for the first time"
+  become_user: "{{ ansible_user }}"
+  become: true
+  shell: "/usr/bin/python {{ script_install_path }}readtemp-rrd.py"
