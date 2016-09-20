@@ -22,9 +22,9 @@ def create_rrd_unless_exists(filename):
     print("Creating RRD database file %s" % filename)
     rrdtool.create(
         filename,
-        '--step', '5m',
-        'DS:temp:GAUGE:15m:-100:100',
-        'RRA:AVERAGE:0.5:15m:10y'
+        '--step', '300',
+        'DS:temp:GAUGE:900:-100:100',
+        'RRA:AVERAGE:0.5:2:525600'
     )
 
 def graph_last_day(sensors):
