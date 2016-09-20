@@ -18,6 +18,8 @@
     - "rrdtool"
 
 - name: "install temperature reading script"
+  become_user: "{{ ansible_user }}"
+  become: true
   copy:
     src: "readtemp-rrd.py"
     dest: "{{ script_install_path }}readtemp-rrd.py"

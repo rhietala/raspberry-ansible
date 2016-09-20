@@ -22,8 +22,9 @@ def create_rrd_unless_exists(filename):
     print("Creating RRD database file %s" % filename)
     rrdtool.create(
         filename,
-        'DS:temp:GAUGE:600:-100:100',
-        'RRA:AVERAGE:0.5:1:525600'
+        '--step', '5m',
+        'DS:temp:GAUGE:15m:-100:100',
+        'RRA:AVERAGE:0.5:15m:10y'
     )
 
 def graph_last_day(sensors):
@@ -35,15 +36,14 @@ def graph_last_day(sensors):
         color = COLORS[i % len(COLORS)];
         defs.append('DEF:' + sensor.id + '=' +
                     DATABASE_PATH + sensor.id + '.rrd:temp:AVERAGE')
-        lines.append('LINE1:' + sensor.id + color + ':' +
-                     sensor_name(sensor.id))
+        lines.append('LINE1:' + sensor.id + color + ':' + sensor_name(sensor.id))
         current_temps.append('GPRINT:' + sensor.id +
                              ':LAST:' + sensor_name(sensor.id) + '\: %4.2lf\l')
 
     params = [
         LAST_DAY_GRAPH_FILE,
         '-a', 'PNG',
-        '-w', '640',
+        '-w', '500',
         '-h', '250',
         '--start', '-86400',
         '--end', 'now',
@@ -57,7 +57,7 @@ def graph_last_day(sensors):
 for sensor in W1ThermSensor.get_available_sensors():
     filename = sensor.id + '.rrd'
     create_rrd_unless_exists(filename)
-    error = rrdtool.update(filename, 'N:%.2lf' % (sensor.get_temperature()))
+    error = rrdtool.update(filename, 'N:%.2f' % (sensor.get_temperature()))
     print("Sensor %s has temperature %.2f" % (sensor.id, sensor.get_temperature()))
 
 graph_last_day(W1ThermSensor.get_available_sensors())
