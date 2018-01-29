@@ -1,0 +1,12 @@
+---
+- name: install snapserver
+  apt:
+    deb: "https://github.com/badaix/snapcast/releases/download/v0.12.0/snapserver_0.12.0_armhf.deb"
+
+- name: open ports in firewall
+  ufw:
+    rule: "allow"
+    port: "{{ item }}"
+  with_items:
+    - 1704
+    - 1705

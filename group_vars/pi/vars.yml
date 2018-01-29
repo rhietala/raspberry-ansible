@@ -1,0 +1,26 @@
+---
+ansible_user: "pi"
+ansible_ssh_private_key_file: "keys/id_rsa"
+dbs_ssh_pubkey: "{{ lookup('file', 'keys/id_rsa.pub') }}"
+
+dbs_set_hostname: true
+dbs_set_locale: true
+dbs_set_timezone: true
+dbs_set_ntp: true
+dbs_hostname: "{{ inventory_hostname }}"
+dbs_default_locale: "en_US.UTF-8"
+dbs_locales:
+  - "en_US.UTF-8"
+dbs_timezone: "Europe/Helsinki"
+
+dbs_ntp_hosts:
+  - "0.fi.pool.ntp.org"
+  - "1.fi.pool.ntp.org"
+  - "2.fi.pool.ntp.org"
+  - "3.fi.pool.ntp.org"
+dbs_ntp_pkg: "ntp"
+
+dbs_apt_default_host: "mirrordirector.raspbian.org"
+dbs_apt_components: "main contrib non-free rpi"
+open_ports:
+  - "ssh"

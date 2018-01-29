@@ -1,0 +1,12 @@
+---
+- name: install snapclient
+  apt:
+    deb: "https://github.com/badaix/snapcast/releases/download/v0.12.0/snapclient_0.12.0_armhf.deb"
+
+- name: configure snapcast server address
+  lineinfile:
+    path: "/etc/default/snapclient"
+    regexp: "^SNAPCLIENT_OPTS"
+    line: "SNAPCLIENT_OPTS=\"{{ snapclient_opts }}\""
+  notify: restart snapcast client
+

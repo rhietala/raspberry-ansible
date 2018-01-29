@@ -1,0 +1,8 @@
+---
+- name: mount device
+  mount:
+    src: "{{ exthdd }}"
+    path: "{{ exthdd_mountpoint }}"
+    fstype: "{{ exthdd_fstype }}"
+    state: mounted
+    opts: "umask=000" # allow writes from all users

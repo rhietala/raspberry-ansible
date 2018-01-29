@@ -1,3 +1,24 @@
 ---
 - name: UPDATE-ALTERNATIVE | Vim is my main editor
   alternatives: name=editor path={{ dbs_alternative_editor }}
+
+- name: SSH login speedup, add disabling lines
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "{{ item }}"
+  with_items:
+    - "UseDNS no"
+    - "GSSAPIAuthentication no"
+    - "UsePAM no"
+  notify: restart ssh
+
+- name: SSH login speedup, remove enabling lines
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item }}"
+    state: absent
+  with_items:
+    - "UseDNS yes"
+    - "GSSAPIAuthentication yes"
+    - "UsePAM yes"
+  notify: restart ssh

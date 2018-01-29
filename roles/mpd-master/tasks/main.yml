@@ -1,0 +1,35 @@
+---
+- name: install mpd, nginx, mpc
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "mpd"
+    - "nginx"
+    - "mpc"
+
+- name: copy mpd configuration
+  template:
+    src: "mpd.conf.j2"
+    dest: "/etc/mpd.conf"
+  notify: restart mpd
+
+- name: copy nginx cover art configuration
+  template:
+    src: "mpd-cover-art.conf.j2"
+    dest: "/etc/nginx/sites-available/mpd-cover-art.conf"
+  notify: restart nginx
+
+- name: symlink nginx cover art configuration
+  file:
+    src: "/etc/nginx/sites-available/mpd-cover-art.conf"
+    dest: "/etc/nginx/sites-enabled/mpd-cover-art.conf"
+    state: "link"
+  notify: restart nginx
+
+- name: open ports in firewall
+  ufw:
+    rule: "allow"
+    port: "{{ item }}"
+  with_items:
+    - "http"
+    - 6600

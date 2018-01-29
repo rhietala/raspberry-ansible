@@ -1,0 +1,17 @@
+---
+enable_wifi: True
+mpd_master: False
+asound_conf: |
+  pcm.!default makemono
+
+  pcm.makemono {
+    type route
+    slave.pcm "sysdefault:VX1"
+    ttable {
+      0.0 1    # in-channel 0, out-channel 0, 100% volume
+      1.0 1    # in-channel 1, out-channel 0, 100% volume
+    }
+  }
+
+snapcast_server: "192.168.1.249"
+snapclient_opts: "--host {{ snapcast_server }} --soundcard makemono"

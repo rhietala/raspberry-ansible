@@ -1,0 +1,19 @@
+---
+enable_wifi: False
+mpd_master: True
+exthdd: "/dev/sda1"
+exthdd_fstype: "vfat"
+exthdd_mountpoint: "/mnt/piikiekko"
+music_dir: "{{ exthdd_mountpoint }}/musiikkia"
+asound_conf: |
+  pcm.!default {
+    type hw
+    card 1
+  }
+
+  ctl.!default {
+    type hw
+    card 1
+  }
+snapcast_server: "192.168.1.249"
+snapclient_opts: "--host {{ snapcast_server }}"

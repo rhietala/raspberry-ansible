@@ -1,0 +1,10 @@
+server {
+    listen 80;
+    server_name {{ ansible_host }};
+
+    location /cover-art/ {
+        root {{ music_dir }};
+        rewrite /cover-art/(.*) /$1 break;
+        try_files $uri $uri;
+    }
+}

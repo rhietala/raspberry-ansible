@@ -1,0 +1,6 @@
+---
+- name: restart machine
+  shell: reboot
+  async: 1
+  poll: 0
+  ignore_errors: true

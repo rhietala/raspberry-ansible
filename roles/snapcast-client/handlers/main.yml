@@ -1,0 +1,5 @@
+---
+- name: restart snapcast client
+  service:
+    name: snapclient
+    state: restarted

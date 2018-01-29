@@ -1,0 +1,23 @@
+---
+- name: install alsa-utils
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "alsa-utils"
+
+- name: add snd_bcm2835 kernel module
+  modprobe:
+    name: "snd_bcm2835"
+
+- name: add snd_bcm2835 kernel module to be loaded on boot
+  lineinfile:
+    path: "/etc/modules"
+    line: "snd_bcm2835"
+
+- name: setup alsa default sound card
+  copy:
+    content: "{{ asound_conf }}" # device-dependent
+    dest: "/etc/asound.conf"
+  notify:
+    - reboot
+    - wait for reboot

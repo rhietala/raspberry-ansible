@@ -1,0 +1,12 @@
+---
+- name: Add wifi configuration
+  blockinfile:
+    dest: "/etc/wpa_supplicant/wpa_supplicant.conf"
+    block: |
+      network={
+      	ssid="{{ wifi_network }}"
+      	psk="{{ wifi_password }}"
+      	key_mgmt=WPA-PSK
+      }
+  when: ansible_wlan0
+  notify: restart machine

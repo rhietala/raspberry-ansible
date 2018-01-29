@@ -1,0 +1,15 @@
+- hosts: music-master
+  become: true
+
+  roles:
+    - alsa
+    - snapcast-server
+    - snapcast-client
+    - mpd-master
+
+- hosts: music-slave
+  become: true
+
+  roles:
+    - alsa
+    - snapcast-client

@@ -1,0 +1,29 @@
+music_directory    "{{ music_dir }}"
+playlist_directory "/var/lib/mpd/playlists"
+db_file            "/var/lib/mpd/tag_cache"
+log_file           "/var/log/mpd/mpd.log"
+pid_file           "/run/mpd/pid"
+state_file         "/var/lib/mpd/state"
+sticker_file       "/var/lib/mpd/sticker.sql"
+
+user               "mpd"
+bind_to_address    "0.0.0.0"
+filesystem_charset "UTF-8"
+id3v1_encoding     "UTF-8"
+
+input {
+  plugin "curl"
+}
+
+#audio_output {
+#  type  "alsa"
+#  name  "My ALSA Device"
+#}
+
+audio_output {
+  type       "fifo"
+  name       "snapcast"
+  path       "/tmp/snapfifo"
+  format     "48000:16:2"
+  mixer_type "software"
+}

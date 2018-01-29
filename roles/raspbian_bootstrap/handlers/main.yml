@@ -19,3 +19,6 @@
 
 - name: reload networking
   service: name=networking state=reloaded
+
+- name: restart ssh
+  service: name=ssh state=restarted

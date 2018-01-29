@@ -1,0 +1,12 @@
+---
+- name: reboot
+  command: sleep 2 && shutdown -r now "Ansible reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: wait for reboot
+  local_action:
+    module: wait_for host="{{ ansible_ssh_host }}" state=started
+  become: false
+
