@@ -1,6 +1,6 @@
 ---
 enable_wifi: True
-mpd_master: False
+mpd_server: False
 asound_conf: |
   pcm.!default makemono
 
