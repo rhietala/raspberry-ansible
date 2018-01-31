@@ -1,9 +1,9 @@
 ---
 enable_wifi: False
-mpd_server: True
 exthdd: "/dev/sda1"
 exthdd_fstype: "vfat"
 exthdd_mountpoint: "/mnt/piikiekko"
+mpd_server: True
 music_dir: "{{ exthdd_mountpoint }}/musiikkia"
 asound_conf: |
   pcm.!default {
