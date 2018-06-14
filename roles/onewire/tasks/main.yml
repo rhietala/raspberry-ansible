@@ -22,8 +22,8 @@
   modprobe:
     name: "{{ item }}"
   with_items:
-    - w1-gpio
-    - w1-therm
+    - "w1-gpio"
+    - "w1-therm"
 
 - name: Add 1-wire kernel modules to be loaded on startup
   become: true
@@ -31,5 +31,5 @@
     dest: "/etc/modules"
     line: "{{ item }}"
   with_items:
-    - w1-gpio
-    - w1-therm
+    - "w1-gpio"
+    - "w1-therm"
