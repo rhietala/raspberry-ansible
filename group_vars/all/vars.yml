@@ -24,3 +24,16 @@ dbs_apt_default_host: "mirrordirector.raspbian.org"
 dbs_apt_components: "main contrib non-free rpi"
 open_ports:
   - "ssh"
+
+script_install_path: "/home/pi"
+
+sensors:
+  - id: "05168020fdff"
+    shortname: "oloh-tvtaso"
+    name: "Olohuone TV-taso"
+  - id: "05168043d3ff"
+    shortname: "mh-ulko"
+    name: "Makuuhuone ulko"
+  - id: "05168068aeff"
+    shortname: "mh-sisa"
+    name: "Makuuhuone sisä"
