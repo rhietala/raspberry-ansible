@@ -1,0 +1,9 @@
+{
+{% for sensor in sensors %}
+  "{{ sensor.id }}": {
+    "shortname": "{{ sensor.shortname }}",
+    "name": "{{ sensor.name }}"
+  }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+}

@@ -1,0 +1,6 @@
+---
+- name: "copy temperature sensors config file"
+  become_user: "{{ ansible_user }}"
+  template:
+    src: "sensors.json.j2"
+    dest: "{{ script_install_path }}/sensors.json"

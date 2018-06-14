@@ -1,0 +1,53 @@
+---
+- name: "add influxdb package repository key"
+  apt_key:
+    url: "https://repos.influxdata.com/influxdb.key"
+    state: "present"
+
+- name: "add influxdb package repository"
+  apt_repository:
+    repo: "deb https://repos.influxdata.com/debian jessie stable"
+    state: "present"
+
+- name: "install influxdb"
+  apt:
+    name: "influxdb"
+    update_cache: "yes"
+  notify: "start influxdb"
+
+- name: "copy influxdb.conf"
+  template:
+    src: "influxdb.conf.j2"
+    dest: "/etc/influxdb/influxdb.conf"
+  notify: "restart influxdb"
+
+- name: "ensure that influxdb is running before adding admin user"
+  meta: "flush_handlers"
+
+- name: "wait for influxdb to start"
+  pause:
+    seconds: 10
+
+- name: "add influxdb admin user"
+  uri:
+    url: "http://localhost:{{ influxdb_port }}/query"
+    method: "POST"
+    body: "q=CREATE USER {{ influxdb_user }} WITH PASSWORD '{{ influxdb_pass }}' WITH ALL PRIVILEGES"
+    user: "{{ influxdb_user }}"
+    password: "{{ influxdb_pass }}"
+
+- name: "create database"
+  uri:
+    url: "http://localhost:{{ influxdb_port }}/query"
+    method: "POST"
+    body: "q=CREATE DATABASE {{ influxdb_dbname }}"
+    user: "{{ influxdb_user }}"
+    password: "{{ influxdb_pass }}"
+
+- name: "open firewall ports for influxdb"
+  ufw:
+    rule: "allow"
+    port: "{{ item }}"
+  with_items:
+    - "{{ influxdb_admin_port }}"
+    - "{{ influxdb_port }}"

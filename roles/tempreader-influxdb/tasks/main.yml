@@ -1,0 +1,33 @@
+---
+- name: "install required software from apt"
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "python"
+    - "python-pip"
+
+- name: "install python libraries"
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - "w1thermsensor"
+    - "influxdb"
+
+- name: "install temperature reading script"
+  become_user: "{{ ansible_user }}"
+  become: true
+  template:
+    src: "readtemp-influxdb.py.j2"
+    dest: "{{ script_install_path }}readtemp-influxdb.py"
+
+- name: "add temperature reading to cron"
+  cron:
+    name: "read all temperature sensors to influxdb"
+    job: "/usr/bin/python {{ script_install_path }}readtemp-influxdb.py"
+    minute: "*/1"
+    user: "{{ ansible_user }}"
+
+- name: "run temperature reading for the first time"
+  become_user: "{{ ansible_user }}"
+  become: true
+  shell: "/usr/bin/python {{ script_install_path }}readtemp-influxdb.py"

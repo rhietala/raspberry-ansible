@@ -1,0 +1,16 @@
+- hosts: all
+  become: true
+  vars:
+    influxdb_admin_port: "8083"
+    influxdb_port: "8086"
+    influxdb_host: "{{ secret.influxdb_host }}"
+    influxdb_user: "{{ secret.influxdb_user }}"
+    influxdb_pass: "{{ secret.influxdb_pass }}"
+    influxdb_dbname: "{{ secret.influxdb_dbname }}"
+    script_install_path: "/home/pi/"
+
+  roles:
+    - { role: "influxdb", when: "'server' in group_names" }
+    - { role: "onewire", when: "'tempreader' in group_names" }
+    - { role: "tempsensor-config", when: "'tempreader' in group_names" }
+    - { role: "tempreader-influxdb", when: "'tempreader' in group_names" }
