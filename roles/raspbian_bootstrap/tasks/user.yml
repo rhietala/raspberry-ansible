@@ -8,6 +8,10 @@
     - "{{ dbs_groups }}"
   when: item.state is not defined or item.state == 'present'
 
+- name: AUTHORIZED_KEY | Install SSH public key to pi user
+  authorized_key: user=pi key="{{ dbs_ssh_pubkey }}"
+  when: dbs_ssh_pubkey is defined
+
 - name: USER | Add users to the system
   user: >
     name=pi
@@ -17,10 +21,6 @@
     createhome=yes
     password={{ password | password_hash('sha512') }}
   register: u
-
-- name: AUTHORIZED_KEY | Install SSH public key to pi user
-  authorized_key: user=pi key="{{ dbs_ssh_pubkey }}"
-  when: dbs_ssh_pubkey is defined
 
 - name: TEMPLATE | Create sudoers file
   template: >
