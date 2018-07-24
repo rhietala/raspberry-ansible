@@ -2,7 +2,8 @@
 {% for sensor in sensors %}
   "{{ sensor.id }}": {
     "shortname": "{{ sensor.shortname }}",
-    "name": "{{ sensor.name }}"
+    "name": "{{ sensor.name }}",
+    "inside": "{{ sensor.inside }}"
   }{% if not loop.last %},{% endif %}
 
 {% endfor %}

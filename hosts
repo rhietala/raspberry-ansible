@@ -15,3 +15,7 @@ rpi-kph
 [tempreader]
 rpi-makuuhuone
 rpi-olohuone
+
+[ruuvitag]
+rpi-makuuhuone
+rpi-kph
